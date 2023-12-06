@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حسین فیض طالبی</title>
+    <style>
+    @font-face {
+      font-family: 'yekan';
+      src: url('./fonts/YekanBakhFaNum-ExtraBold.woff') format('woff'),
+    }
+
+    body {
+      direction: rtl;
+      font-family: 'yekan';
+      background-image: url("img/bg.jpg");
+      color: #fff;
+      text-align: center; 
+    }
+    .button {
+      font-family: 'yekan';
+      padding: 10px 20px;
+      margin-top: 20px;
+      background-color: transparent;
+      color: #fff;
+      border: 1px solid #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease; 
+    }
+    .button:hover {
+      background-color: #ffffff1a; 
+    }
+    .form{
+    display: flex;
+    direction: rtl;
+    justify-content: center;
+
+    }
+    .bgform{
+      padding: 20px;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(7px);
+    box-shadow: rgb(0 0 0 / 36%) 0px 48px 100px 0px;
+    background-color: rgba(0, 0, 0, 0.315);
+    }
+    .form_in{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+    gap: 10px;
+    justify-items: start;
+    }
+    label {
+    padding: 8px;
+    display: block;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 50px auto; 
+      padding: 10px;
+      border: 2px solid #fff; 
+    }
+    th, td {
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+      color: black;
+    }
+        label, input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            width: calc(100% - 20px);
+            display: block;
+        }
+    </style>
+</head>
+<body>
+  <div class="form">
+      <div class="bgform">
+          <form id="dataForm" class="form_in">
+              <div class="part">
+                  <label for="name">نام:</label>
+                  <input type="text" id="name" name="name">
+              </div>
+              <div class="part">
+                  <label for="lastname">نام خانوادگی:</label>
+                  <input type="text" id="lastname" name="lastname">
+              </div>
+              <div class="part">
+                  <label for="age">سن:</label>
+                  <input type="text" id="age" name="age" oninput="validateInput(this, 2)">
+              </div>
+              <div class="part">
+                  <label for="major">رشته:</label>
+                  <input type="text" id="major" name="major">
+              </div>
+              <div class="part">
+                  <label for="lessons">دروس:</label>
+                  <input type="text" id="lessons" name="lessons">
+              </div>
+              <div class="part">
+                  <label for="grade">نمره:</label>
+                  <input type="text" id="grade" name="grade" oninput="validateInputs(this, 2)">
+              </div>
+
+              <input class="button" type="button" value="افزودن داده" onclick="addData()">
+          </form>
+      </div>
+  </div>
+
+  <table id="myTable">
+      <thead>
+          <tr>
+              <th>نام</th>
+              <th>نام خانوادگی</th>
+              <th>سن</th>
+              <th>رشته</th>
+              <th>دروس</th>
+              <th >نمره</th>
+          </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+  </table>
+
+  <script>
+        function validateInput(input, maxDigits) {
+
+            input.value = input.value.replace(/[^\d]/g, '');
+            if (input.value.length > maxDigits) {
+                input.value = input.value.slice(0, maxDigits);
+            }
+        }
+
+        function validateInputs(input, maxDigits) {
+         input.value = input.value.replace(/[^\d]/g, '');
+          if (parseInt(input.value) > 20) {
+        input.value = "20"; 
+         }
+        if (input.value.length > maxDigits) {
+          input.value = input.value.slice(0, maxDigits);
+           }
+        }
+
+      function addData() {
+          var name = document.getElementById("name").value;
+          var lastname = document.getElementById("lastname").value;
+          var age = document.getElementById("age").value;
+          var major = document.getElementById("major").value;
+          var lessons = document.getElementById("lessons").value;
+          var grade = document.getElementById("grade").value;
+
+          // Check for empty fields
+          if (!name || !lastname || !age || !major || !lessons || !grade) {
+              alert("لطفاً تمام فیلدها را پر کنید");
+              return;
+          }
+
+  
+          if (!/^\d+$/.test(age) || !/^\d+$/.test(grade)) {
+                alert("لطفاً فقط اعداد مجاز هستند");
+                return;
+            }
+
+          var newData = {
+              name: name,
+              lastname: lastname,
+              age: age,
+              major: major,
+              lessons: lessons,
+              grade: grade
+              
+          };
+
+          var data = []; 
+
+          data.push(newData);
+
+          populateTable(data);
+
+
+          document.getElementById("name").value = "";
+          document.getElementById("lastname").value = "";
+          document.getElementById("age").value = "";
+          document.getElementById("major").value = "";
+          document.getElementById("lessons").value = "";
+          document.getElementById("grade").value = "";
+      }
+
+
+      function populateTable(data) {
+          var tbody = document.querySelector("#myTable tbody");
+
+          data.forEach(function (person) {
+              var row = tbody.insertRow();
+              var cell1 = row.insertCell(0);
+              var cell2 = row.insertCell(1);
+              var cell3 = row.insertCell(2);
+              var cell4 = row.insertCell(3);
+              var cell5 = row.insertCell(4);
+              var cell6 = row.insertCell(5);
+
+              cell1.innerHTML = person.name;
+              cell2.innerHTML = person.lastname;
+              cell3.innerHTML = person.age;
+              cell4.innerHTML = person.major;
+              cell5.innerHTML = person.lessons;
+              cell6.innerHTML = person.grade;
+
+          });
+          sortTable(5);
+      }
+      function sortTable(colIndex) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("myTable");
+            switching = true;
+            
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[colIndex];
+                    y = rows[i + 1].getElementsByTagName("TD")[colIndex];
+                    
+                    if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
